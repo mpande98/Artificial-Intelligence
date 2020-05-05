@@ -23,9 +23,8 @@ def print_board(board):
             row += (str(board[i + j]) + " ")
         print(row)
 
-
+"""Helper function to convert board dictionary to string for writing."""
 def board_to_string(board):
-    """Helper function to convert board dictionary to string for writing."""
     ordered_vals = []
     for r in ROW:
         for c in COL:
@@ -91,21 +90,6 @@ def get_square(board, r, c, key=False):
     return square 
 
 
-"""def get_square(board, r, c, key=False):
-    square = []
-    r_num = ord(r)-ord('A')
-    c_num = ord(c) - ord('1')
-    print(r_num)
-    for i in range(r_num/3*3, r_num) + range(r_num+1, r_num/3*3+3):
-        for j in range(c_num/3*3, c_num) + range(c_num+1, c_num/3*3+3):
-            if key:
-                square.append(ROW[i] + COL[j])
-            else:
-                val = board[ROW[i] + COL[j]] 
-                square.append(int(val))
-    return square 
-
-"""
 """Helper functions that check if rows, columns, and squares are valid"""
 def check_row(board):
     for r in ROW:
@@ -229,8 +213,6 @@ def inference(board, v, row, col):
         c = neighbor[1]
         # only looking at unassigned 
         if board[neighbor] == 0:
-            # this is causing issues 
-            #domain_neighbor = domain[r+c]
             domain_neighbor = get_valid_values(board, r, c)
             #print(domain_neighbor)
             if v in domain_neighbor:
@@ -245,8 +227,6 @@ def backtrack(board):
     _, solved_board = backtracking(board)
     return solved_board 
     
-# CREATE DICTIONARY THAT MAPS DOMAIN TO EACH VALUE
-
 
 # goal test board, choose next variable/found domain using the board
 # modify board in for loop, pass in updated board through backtracking recursively 
@@ -258,7 +238,7 @@ def backtracking(board):
     # Domain = {1, 2, ..., 9}
     # Variables = {A1,..,A9,B1,..,B9}, |V| = 81 
     # 27 constraints 
-    #print("here")
+ 
     if len(get_empty_cells(board))==0:#goal_test(board):
         return (True, board)
     
@@ -271,8 +251,7 @@ def backtracking(board):
     domain = first_empty[2]
     # gets value, domain using MRV
     #val, domain = MRV(board)
-    #print('val', val)
-    #print_board(board)
+   
     for v in domain:
         # maybe bottle neck this 
         if check_cell(board, v, row, col):
@@ -281,8 +260,7 @@ def backtracking(board):
             #print(inferences[0])
             if inferences[0]:
                 board[val] = v
-                #empty_cells.pop(0)
-                #empty_cells.remove(val)
+           
                 result = backtracking(board)
                 if result[0]:
                     return result
@@ -291,20 +269,6 @@ def backtracking(board):
     return (False, board)     
 
 
-    """for each value in order_domain_values(var, assignment, csp)
-        if value is consistent with assignment then 
-            add {var = value} to assignment
-            inferences = inference(csp, var, value)
-            if inferences != failure then
-                add inferences to assignment 
-                result = backtrack(assignment, csp) 
-                if result != failure then return result
-
-        remove {var=value} and inferences from assignment
-    return failure 
-
-    pass 
-    """
 
 if __name__ == '__main__':
     #  Read boards from source.
@@ -326,30 +290,13 @@ if __name__ == '__main__':
 
         if len(line) < 9:
             continue
-        #idx += 1 
-        #if idx > 3: break 
+       
         # Parse boards to dict representation, scanning board L to R, Up to Down
         board = { ROW[r] + COL[c]: int(line[9*r+c])
                   for r in range(9) for c in range(9)}
-        #print(board["B1"])
-        # Print starting board. TODO: Comment this out when timing runs.
-        
-        #print(get_empty_cells(board))
-        #print(MRV(board))
-        #print(get_neighbors(board, "B", "2"))
-        #neighbors = get_neighbors(board, "B", "2")
-        #print(get_neighbor_keys(board,"B", "2", neighbrs))
-        #print_board(board)
-        #s = time.clock() 
-        #print(get_square(board, "A", "1"))
-        # Solve with backtracking
+       
         solved_board = backtrack(board)
-        #print(MRV_empty(board))
-        # Print solved board. TODO: Comment this out when timing runs.
-        #print_board(solved_board)
-        #print(get_valid_values(board, "A", "1"))
-        #print(time.clock() - s) 
-        # Write board to file
+        
         outfile.write(board_to_string(solved_board))
         
         outfile.write('\n')
