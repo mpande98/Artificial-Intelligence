@@ -13,9 +13,8 @@ e.g. my_board['A1'] = 8
 ROW = "ABCDEFGHI"
 COL = "123456789"
 
-
+"""Helper function to print board in a square."""
 def print_board(board):
-    """Helper function to print board in a square."""
     print("-----------------")
     for i in ROW:
         row = ''
